@@ -9,7 +9,7 @@ phases:
       - AWS_ACCOUNT_ID=609609837128
       #- REPOSITORY_URI=609609837128.dkr.ecr.us-east-1.amazonaws.com/k8s-guillermo
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      - IMAGE_REPO_NAME=k8s-guillermo
+      - IMAGE_REPO_NAME=k8s-python
       - IMAGE_TAG=${COMMIT_HASH:=latest}
   build:
     commands:
