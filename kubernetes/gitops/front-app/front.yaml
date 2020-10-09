@@ -20,7 +20,7 @@ spec:
         name: python
     spec:
       containers:
-      - image: kontinu/python-expert:v1.0
+      - image: 609609837128.dkr.ecr.us-east-1.amazonaws.com/k8s-python:c10a1cb
         imagePullPolicy: IfNotPresent
         name: python-front
         env:
