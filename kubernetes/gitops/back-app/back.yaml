@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-back
+  labels:
+    name: deployment-back
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: go
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        name: go
+    spec:
+      containers:
+      - image: kontinu/go-expert:v1.0
+        imagePullPolicy: IfNotPresent
+        name: back-go
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        resources: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-back
+spec:
+  selector:
+    name: go
+  type: ClusterIP
+  ports:
+    - name: http-back
+      port: 80
+      targetPort: 8080

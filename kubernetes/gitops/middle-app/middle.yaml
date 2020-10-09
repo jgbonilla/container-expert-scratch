@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-middle
+  labels:
+    name: deployment-middle
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: nodejs
+  template:
+    metadata:
+      labels:
+        name: nodejs
+    spec:
+      containers:
+      - image: kontinu/nodejs-expert:v1.0
+        imagePullPolicy: IfNotPresent
+        name: middle-nodejs
+        env:
+          - name: NEXT_URL
+            value: "http://service-back/api"
+        ports:
+        - name: middle-port
+          containerPort: 8080
+          protocol: TCP
+        resources: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-middle
+spec:
+  selector:
+    name: nodejs
+  type: ClusterIP
+  ports:
+    - name: http-nodejs
+      port: 80
+      targetPort: 8080

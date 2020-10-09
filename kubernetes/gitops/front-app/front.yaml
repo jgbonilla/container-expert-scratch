@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-front
+  labels:
+    name: deployment-front
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: python
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        name: python
+    spec:
+      containers:
+      - image: kontinu/python-expert:v1.0
+        imagePullPolicy: IfNotPresent
+        name: python-front
+        env:
+          - name: NEXT_URL
+            value: "http://service-middle/api"
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 5
+        resources: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-front
+spec:
+  selector:
+    name: python
+  type: LoadBalancer
+  ports:
+    - name: http-python
+      port: 80
+      targetPort: 8080
